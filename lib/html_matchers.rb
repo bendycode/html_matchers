@@ -1,3 +1,4 @@
+require 'hpricot'
 %w(drop_down radio_group span_text table_body table_header td_link).each do |element|
 	require File.join(File.dirname(__FILE__), 'matchers', "#{element}_matcher")
 end
