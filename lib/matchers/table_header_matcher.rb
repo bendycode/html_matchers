@@ -18,9 +18,7 @@ module Spec # :nodoc:
 					doc = Hpricot.XML(html)
 					puts "Missing table with id: #{@table_id}" if doc.search("table##{@table_id}").empty?
 
-					elements = doc.search("table##{@table_id} tr").select do |e|
-						! e.search('th').empty?
-					end
+					elements = doc.search("table##{@table_id} tr").select{|e| ! e.search('th').empty? }
 					# puts "Found header rows: #{elements.inspect}"
 
 					elements.map{|n| n.search('/th').map{|n| n.inner_text.strip.gsub(/\n    \t\t/, "\n")}}

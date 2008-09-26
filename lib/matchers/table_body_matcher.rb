@@ -2,7 +2,8 @@ module Spec # :nodoc:
   module Rails
     module Matchers
 			class TableBodyMatcher
-				def initialize expected
+				def initialize table_id, expected
+					@table_id = table_id
 					@expected = expected
 				end
 				def matches? response
@@ -14,7 +15,7 @@ module Spec # :nodoc:
 				end
 				def extract_html_content html
 					doc = Hpricot.XML(html)
-					elements = doc.search('/table/tr')
+					elements = doc.search('/table tr').select{|e| ! e.search('td').empty? }
 					elements.map{|n| n.search('/td').map{|n| n.inner_text.strip.gsub(/\n    \t\t/, "\n")}}
 				end
 			end
