@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe 'table_body_matcher' do
-	describe 'with interposing <tbody> element' do
+	describe 'with <tbody> element' do
 		it 'should find headers' do
 			response = mock_model(Object, :body => '<table id="my_id"><tbody><tr><td>c1</td><td>c2</td></tr></tbody></table>')
 			response.should have_table_body('my_id', [['c1', 'c2']])
@@ -21,7 +21,12 @@ describe 'table_body_matcher' do
 	end
 
 	it 'can be called without a table_id' do
-		response = mock_model(Object, :body => '<table id="my_id"><tr><td>c1</td><td>c2</td></tr></table>')
+		response = mock_model(Object, :body => '<table><tr><td>c1</td><td>c2</td></tr></table>')
 		response.should have_table_body([['c1', 'c2']])
+	end
+
+	it 'matches multiple body rows' do
+		response = mock_model(Object, :body => '<table><tr><td>c1</td><td>c2</td></tr><tr><td>c3</td><td>c4</td></tr></table>')
+		response.should have_table_body([['c1', 'c2'], ['c3', 'c4']])
 	end
 end
