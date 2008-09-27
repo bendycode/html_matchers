@@ -36,4 +36,11 @@ describe 'table_body_matcher' do
 			response.should_not have_table_body('wrong_id', [['c1', 'c2']])
 		end
 	end
+
+	describe 'passed non-matching expected' do
+		it 'should not match' do
+			response = mock_model(Object, :body => '<table id="my_id"><tr><td>c1</td><td>c2</td></tr></table>')
+			response.should_not have_table_body('my_id', [['c3', 'c2']])
+		end
+	end
 end
