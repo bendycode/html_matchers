@@ -18,9 +18,12 @@ module Spec # :nodoc:
 				def failure_message
 					"\nWrong #{@element_name} contents.\nexpected: #{@expected.inspect}\n   found: #{@actual.inspect}\n\n"
 				end
+				def negative_failure_message
+					"\nShould not have matched #{@expected.inspect}.\n\n"
+				end
 				def extract_html_content html
 					doc = Hpricot.XML(html)
-					elements = doc.search('/table tr').select{|e| ! e.search('td').empty? }
+					elements = doc.search("table#{"##{@table_id}" if @table_id} tr").select{|e| ! e.search('td').empty? }
 					elements.map{|n| n.search('/td').map{|n| n.inner_text.strip.gsub(/\n    \t\t/, "\n")}}
 				end
 			end
