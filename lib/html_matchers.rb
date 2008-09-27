@@ -23,8 +23,8 @@ module Spec # :nodoc:
 				TableHeaderMatcher.new table_id, expected
 			end
 
-			def have_table_body table_id, expected
-				TableBodyMatcher.new table_id, expected
+			def have_table_body table_id_or_expected, expected = nil
+				TableBodyMatcher.new table_id_or_expected, expected
 			end
 			
 			def have_td_link target_id, expected_link, expected_text

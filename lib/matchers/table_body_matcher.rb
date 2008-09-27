@@ -2,9 +2,14 @@ module Spec # :nodoc:
   module Rails
     module Matchers
 			class TableBodyMatcher
-				def initialize table_id, expected
-					@table_id = table_id
-					@expected = expected
+				def initialize table_id_or_expected, expected
+					case table_id_or_expected
+					when String
+						@table_id = table_id_or_expected
+						@expected = expected
+					when Array
+						@expected = table_id_or_expected
+					end
 				end
 				def matches? response
 					@actual = extract_html_content response.body
