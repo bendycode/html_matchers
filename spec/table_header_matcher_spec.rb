@@ -33,6 +33,42 @@ describe 'table_header_matcher' do
 		end
 	end
 
+	describe 'with normal failure' do
+		before(:each) do
+				@response = mock_model Object, :body => 'Some non-matching HTML'
+		end
+
+		it 'should raise ExpectationNotMetError' do
+			lambda{ @response.should have_table_header('id', [['h1', 'h2']]) }.should raise_error(Spec::Expectations::ExpectationNotMetError)
+		end
+
+		it 'should have correct failure message' do
+			begin
+				@response.should have_table_header('id', [['h1', 'h2']])
+			rescue Spec::Expectations::ExpectationNotMetError => e
+				e.to_s.should == "\nWrong table header contents.\nexpected: [[\"h1\", \"h2\"]]\n   found: []\n\n"
+			end
+		end
+	end
+
+	describe 'with negative failure' do
+		before(:each) do
+				@response = mock_model Object, :body => '<table id="my_id"><tr><th>h1</th><th>h2</th></tr></table>'
+		end
+
+		it 'should raise ExpectationNotMetError' do
+			lambda{ @response.should_not have_table_header('my_id', [['h1', 'h2']]) }.should raise_error #(Spec::Expectations::ExpectationNotMetError)
+		end
+
+		it 'should have correct negative failure message' do
+			begin
+				@response.should_not have_table_header('my_id', [['h1', 'h2']])
+			rescue Spec::Expectations::ExpectationNotMetError => e
+				e.to_s.should == "\nTable header should not have contained: [[\"h1\", \"h2\"]]\n"
+			end
+		end
+	end
+
 	private
 
 	def verify_table_header_match id, html, expected
