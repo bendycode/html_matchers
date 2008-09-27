@@ -19,14 +19,14 @@ module Spec # :nodoc:
 				SpanTextMatcher.new target_id, expected_text
 			end
 
-			def have_table_header table_id, expected
-				TableHeaderMatcher.new table_id, expected
+			def have_table_header table_id_or_expected, expected = nil
+				TableHeaderMatcher.new table_id_or_expected, expected
 			end
 
 			def have_table_body table_id_or_expected, expected = nil
 				TableBodyMatcher.new table_id_or_expected, expected
 			end
-			
+
 			def have_td_link target_id, expected_link, expected_text
 				TdLinkMatcher.new target_id, expected_link, expected_text
 			end

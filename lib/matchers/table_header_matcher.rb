@@ -2,11 +2,15 @@ module Spec # :nodoc:
   module Rails
     module Matchers
 			class TableHeaderMatcher
-				def initialize table_id, expected
-					raise 'Invalid "table_id" argument' if table_id.nil?
-					raise 'Invalid "expected" argument' if expected.nil?
-					@table_id = table_id
-					@expected = expected
+				def initialize table_id_or_expected, expected
+					case table_id_or_expected
+					when String
+						@table_id = table_id_or_expected
+						@expected = expected
+					when Array
+						@expected = table_id_or_expected
+					end
+					raise 'Invalid "expected" argument' if @expected.nil?
 				end
 
 				def matches? response
@@ -24,7 +28,7 @@ module Spec # :nodoc:
 
 				def extract_html_content html
 					doc = Hpricot.XML(html)
-					elements = doc.search("table##{@table_id} tr").select{|e| ! e.search('th').empty? }
+					elements = doc.search("table#{"##{@table_id}" if @table_id} tr").select{|e| ! e.search('th').empty? }
 					elements.map{|n| n.search('/th').map{|n| n.inner_text.strip.gsub(/\n    \t\t/, "\n")}}
 				end
 			end

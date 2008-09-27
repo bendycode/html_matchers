@@ -57,13 +57,6 @@ describe 'table_header_matcher' do
 		end
 	end
 
-	describe 'passed nil id' do
-		it 'should raise error' do
-			response = mock_model(Object, :body => '<table id="my_id"><tr><th>h1</th><th>h2</th></tr></table>')
-			lambda{ response.should have_table_header(nil, [['h1', 'h2']])}.should raise_error(RuntimeError, 'Invalid "table_id" argument')
-		end
-	end
-
 	describe 'passed nil expected' do
 		it 'should raise error' do
 			response = mock_model(Object, :body => '<table id="my_id"><tr><th>h1</th><th>h2</th></tr></table>')
@@ -82,6 +75,11 @@ describe 'table_header_matcher' do
 		it 'should not match' do
 			verify_no_header_match 'my_id', '<table id="my_id"><tr><th>h1</th><th>h2</th></tr></table>', [['h1', 'h3']]
 		end
+	end
+
+	it "doesn't require table_id" do
+		response = mock_model Object, :body => '<table id="my_id"><tr><th>h1</th><th>h2</th></tr></table>'
+		response.should have_table_header([['h1', 'h2']])
 	end
 
 	private
