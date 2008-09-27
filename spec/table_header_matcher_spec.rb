@@ -27,6 +27,12 @@ describe 'table_header_matcher' do
 		end
 	end
 
+	describe 'passed wrong expected' do
+		it 'should not match' do
+			verify_no_header_match 'my_id', '<table id="my_id"><tr><th>h1</th><th>h2</th></tr></table>', [['ha', 'hb']]
+		end
+	end
+
 	private
 
 	def verify_table_header_match id, html, expected
