@@ -10,16 +10,17 @@ module Spec # :nodoc:
 					when Array
 						@expected = table_id_or_expected
 					end
+					raise 'Invalid "expected" argument' if @expected.nil?
 				end
 				def matches? response
 					@actual = extract_html_content response.body
 					@actual == @expected
 				end
 				def failure_message
-					"\nWrong #{@element_name} contents.\nexpected: #{@expected.inspect}\n   found: #{@actual.inspect}\n\n"
+					"\nWrong table body contents.\nexpected: #{@expected.inspect}\n   found: #{@actual.inspect}\n\n"
 				end
 				def negative_failure_message
-					"\nShould not have matched #{@expected.inspect}.\n\n"
+					"\nTable body should not have matched: #{@expected.inspect}\n"
 				end
 				def extract_html_content html
 					doc = Hpricot.XML(html)

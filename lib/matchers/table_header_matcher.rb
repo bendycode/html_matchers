@@ -23,7 +23,7 @@ module Spec # :nodoc:
 				end
 
 				def negative_failure_message
-					"\nTable header should not have contained: #{@expected.inspect}\n"
+					"\nTable header should not have matched: #{@expected.inspect}\n"
 				end
 
 				def extract_html_content html
