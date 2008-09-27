@@ -6,21 +6,23 @@ module Spec # :nodoc:
 					@table_id = table_id
 					@expected = expected
 				end
+
 				def matches? response
-					# puts "\n\n\n#{response.body}\n\n\n"
 					@actual = extract_html_content response.body
 					@actual == @expected
 				end
+
 				def failure_message
 					"\nWrong table header contents.\nexpected: #{@expected.inspect}\n   found: #{@actual.inspect}\n\n"
 				end
+
+				def negative_failure_message
+					"\nTable header should not have contained: #{@expected.inspect}\n"
+				end
+
 				def extract_html_content html
 					doc = Hpricot.XML(html)
-					puts "Missing table with id: #{@table_id}" if doc.search("table##{@table_id}").empty?
-
 					elements = doc.search("table##{@table_id} tr").select{|e| ! e.search('th').empty? }
-					# puts "Found header rows: #{elements.inspect}"
-
 					elements.map{|n| n.search('/th').map{|n| n.inner_text.strip.gsub(/\n    \t\t/, "\n")}}
 				end
 			end

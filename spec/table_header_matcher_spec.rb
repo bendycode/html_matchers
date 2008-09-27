@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe 'table_header_matcher' do
 	describe 'with <thead> element' do
-		it 'should find headers' do
+		it 'should have headers' do
 			verify_table_header_match 'my_id', '<table id="my_id"><thead><tr><th>h1</th><th>h2</th></tr></thead></table>', [['h1', 'h2']]
 		end
 	end
@@ -21,10 +21,21 @@ describe 'table_header_matcher' do
 		end
 	end
 
+	describe 'passed wrong id' do
+		it 'should not have header' do
+			verify_no_header_match 'wrong_id', '<table id="my_id"><tr><th>h1</th><th>h2</th></tr></table>', [['h1', 'h2']]
+		end
+	end
+
 	private
 
 	def verify_table_header_match id, html, expected
 		response = mock_model Object, :body => html
 		response.should have_table_header(id, expected)
+	end
+
+	def verify_no_header_match id, html, expected
+		response = mock_model Object, :body => html
+		response.should_not have_table_header(id, expected)
 	end
 end
