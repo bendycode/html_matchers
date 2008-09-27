@@ -13,11 +13,15 @@ describe 'table_header_matcher' do
 		end
 
 		it 'should ignore regular row' do
-			verify_table_header_match 'my_id', '<table id="my_id"><tr><th>h1</th><th>h2</th></tr><tr><td>"regular"</td><td>"row"</td></tr></table>', [['h1', 'h2']]
+			verify_table_header_match 'my_id',
+																'<table id="my_id"><tr><th>h1</th><th>h2</th></tr><tr><td>"regular"</td><td>"row"</td></tr></table>',
+																[['h1', 'h2']]
 		end
 
 		it 'should handle multiple header rows' do
-			verify_table_header_match 'my_id', '<table id="my_id"><tr><th>h1</th><th>h2</th></tr><tr><th>h3</th><th>h4</th></tr><tr><td>"regular"</td><td>"row"</td></tr></table>', [['h1', 'h2'], ['h3', 'h4']]
+			verify_table_header_match 'my_id',
+				'<table id="my_id"><tr><th>h1</th><th>h2</th></tr><tr><th>h3</th><th>h4</th></tr><tr><td>"regular"</td><td>"row"</td></tr></table>',
+				[['h1', 'h2'], ['h3', 'h4']]
 		end
 	end
 
@@ -38,34 +42,45 @@ describe 'table_header_matcher' do
 				@response = mock_model Object, :body => 'Some non-matching HTML'
 		end
 
-		it 'should raise ExpectationNotMetError' do
-			lambda{ @response.should have_table_header('id', [['h1', 'h2']]) }.should raise_error(Spec::Expectations::ExpectationNotMetError)
-		end
-
-		it 'should have correct failure message' do
-			begin
+		it 'should raise ExpectationNotMetError with correct message' do
+			lambda do
 				@response.should have_table_header('id', [['h1', 'h2']])
-			rescue Spec::Expectations::ExpectationNotMetError => e
-				e.to_s.should == "\nWrong table header contents.\nexpected: [[\"h1\", \"h2\"]]\n   found: []\n\n"
-			end
+			end.should raise_error(Spec::Expectations::ExpectationNotMetError, "\nWrong table header contents.\nexpected: [[\"h1\", \"h2\"]]\n   found: []\n\n")
 		end
 	end
 
 	describe 'with negative failure' do
-		before(:each) do
-				@response = mock_model Object, :body => '<table id="my_id"><tr><th>h1</th><th>h2</th></tr></table>'
-		end
-
 		it 'should raise ExpectationNotMetError' do
-			lambda{ @response.should_not have_table_header('my_id', [['h1', 'h2']]) }.should raise_error #(Spec::Expectations::ExpectationNotMetError)
+			response = mock_model Object, :body => '<table id="my_id"><tr><th>h1</th><th>h2</th></tr></table>'
+			lambda{response.should_not have_table_header('my_id', [['h1', 'h2']])}.should raise_error(Spec::Expectations::ExpectationNotMetError,
+				"\nTable header should not have contained: [[\"h1\", \"h2\"]]\n")
 		end
+	end
 
-		it 'should have correct negative failure message' do
-			begin
-				@response.should_not have_table_header('my_id', [['h1', 'h2']])
-			rescue Spec::Expectations::ExpectationNotMetError => e
-				e.to_s.should == "\nTable header should not have contained: [[\"h1\", \"h2\"]]\n"
-			end
+	describe 'passed nil id' do
+		it 'should raise error' do
+			response = mock_model(Object, :body => '<table id="my_id"><tr><th>h1</th><th>h2</th></tr></table>')
+			lambda{ response.should have_table_header(nil, [['h1', 'h2']])}.should raise_error(RuntimeError, 'Invalid "table_id" argument')
+		end
+	end
+
+	describe 'passed nil expected' do
+		it 'should raise error' do
+			response = mock_model(Object, :body => '<table id="my_id"><tr><th>h1</th><th>h2</th></tr></table>')
+			lambda{ response.should have_table_header('my_id', nil)}.should raise_error(RuntimeError, 'Invalid "expected" argument')
+		end
+	end
+
+	describe 'called from nil response object' do
+		it 'should raise error' do
+			lambda{ nil.should have_table_header('my_id', [['h1', 'h2']]) }.should raise_error(NoMethodError,
+				"You have a nil object when you didn't expect it!\nThe error occurred while evaluating nil.body")
+		end
+	end
+
+	describe 'when headers don\'t match' do
+		it 'should not match' do
+			verify_no_header_match 'my_id', '<table id="my_id"><tr><th>h1</th><th>h2</th></tr></table>', [['h1', 'h3']]
 		end
 	end
 

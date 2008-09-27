@@ -3,6 +3,8 @@ module Spec # :nodoc:
     module Matchers
 			class TableHeaderMatcher
 				def initialize table_id, expected
+					raise 'Invalid "table_id" argument' if table_id.nil?
+					raise 'Invalid "expected" argument' if expected.nil?
 					@table_id = table_id
 					@expected = expected
 				end
