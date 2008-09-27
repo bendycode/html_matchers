@@ -1,15 +1,20 @@
 require 'rake'
-require 'rake/testtask'
+require 'spec/rake/spectask'
+# require 'rake/testtask'
 require 'rake/rdoctask'
 
-desc 'Default: run unit tests.'
-task :default => :test
+desc 'Default: run spec tests.'
+task :default => :spec
 
-desc 'Test the html_matchers plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
+desc "Run all specs"
+Spec::Rake::SpecTask.new do |t|
+  t.spec_files = FileList['spec/**/*_spec.rb']
+  t.spec_opts = ['--options', 'spec/spec.opts']
+  # unless ENV['NO_RCOV']
+  #   t.rcov = true
+  #   t.rcov_dir = 'coverage'
+  #   t.rcov_opts = ['--exclude', 'lib/spec.rb,lib/spec/runner.rb,spec\/spec,bin\/spec,examples,\/var\/lib\/gems,\/Library\/Ruby,\.autotest']
+  # end
 end
 
 desc 'Generate documentation for the html_matchers plugin.'
