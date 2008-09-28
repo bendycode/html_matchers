@@ -2,6 +2,7 @@ module Spec # :nodoc:
   module Rails
     module Matchers
 			class DropDownMatcher
+
 				def initialize target_id, expected
 					@target_id = target_id
 					@expected = expected
@@ -24,6 +25,7 @@ module Spec # :nodoc:
 					doc = Hpricot.XML(html)
 					doc.search("select##{@target_id}/option").map{|n| n.inner_text.strip}
 				end
+
 			end
 		end
 	end
