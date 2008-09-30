@@ -1,6 +1,6 @@
 module Spec # :nodoc:
-  module Rails
-    module Matchers
+	module Rails
+		module Matchers
 			class SpanTextMatcher
 
 				def initialize target_id, expected_text

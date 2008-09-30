@@ -1,6 +1,6 @@
 module Spec # :nodoc:
-  module Rails
-    module Matchers
+	module Rails
+		module Matchers
 			class TableHeaderMatcher
 
 				def initialize table_id_or_expected, expected

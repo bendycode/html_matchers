@@ -1,6 +1,6 @@
 module Spec # :nodoc:
-  module Rails
-    module Matchers
+	module Rails
+		module Matchers
 			class TdLinkMatcher
 
 				def initialize target_id, expected_text, expected_link

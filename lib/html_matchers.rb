@@ -1,11 +1,15 @@
 require 'hpricot'
-%w(drop_down radio_group span_text table_body table_header td_link).each do |element|
+%w(check_box_group drop_down radio_group span_text table_body table_header td_link).each do |element|
 	require File.join(File.dirname(__FILE__), 'matchers', "#{element}_matcher")
 end
 
 module Spec # :nodoc:
   module Rails
     module Matchers
+
+			def have_check_box_group target_name, expected
+				CheckBoxGroupMatcher.new target_name, expected
+			end
 
 			def have_dropdown target_id, expected_options
 				DropDownMatcher.new target_id, expected_options

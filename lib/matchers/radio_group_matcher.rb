@@ -1,6 +1,6 @@
 module Spec # :nodoc:
-  module Rails
-    module Matchers
+	module Rails
+		module Matchers
 			class RadioGroupMatcher
 
 				def initialize target_name, expected
