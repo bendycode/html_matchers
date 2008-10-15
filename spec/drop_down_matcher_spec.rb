@@ -20,12 +20,21 @@ describe 'drop_down_matcher' do
 		end
 	end
 
-	describe 'with normal failure' do
+	describe 'without matching select element' do
 		it 'should raise ExpectationNotMetError with correct message' do
 			response = mock_model Object, :body => 'Some non-matching HTML'
 			lambda do
 				response.should have_dropdown('choice', [['Choice 1', 'Choice 2']])
-			end.should raise_error(Spec::Expectations::ExpectationNotMetError, "\nWrong drop down contents.\nexpected: [[\"Choice 1\", \"Choice 2\"]]\n   found: []\n\n")
+			end.should raise_error(Spec::Expectations::ExpectationNotMetError, "\nCould not find a select element with id: 'choice'\n\n")
+		end
+	end
+
+	describe 'with wrong contents in correct select element' do
+		it 'should raise ExpectationNotMetError with correct message' do
+			response = mock_model Object, :body => '<select id="choice"><option value="no_match">No Match</option></select>'
+			lambda do
+				response.should have_dropdown('choice', [['Choice 1', 'Choice 2']])
+			end.should raise_error(Spec::Expectations::ExpectationNotMetError, "\nWrong 'choice' drop down contents.\nexpected: [[\"Choice 1\", \"Choice 2\"]]\n   found: [\"No Match\"]\n\n")
 		end
 	end
 

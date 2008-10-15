@@ -14,7 +14,11 @@ module Spec # :nodoc:
 				end
 
 				def failure_message
-					"\nWrong drop down contents.\nexpected: #{@expected.inspect}\n   found: #{@actual.inspect}\n\n"
+					if @found_select
+						"\nWrong '#{@target_id}' drop down contents.\nexpected: #{@expected.inspect}\n   found: #{@actual.inspect}\n\n"
+					else
+						"\nCould not find a select element with id: '#{@target_id}'\n\n"
+					end
 				end
 
 				def negative_failure_message
@@ -23,7 +27,14 @@ module Spec # :nodoc:
 
 				def extract_html_content html
 					doc = Hpricot.XML(html)
-					doc.search("select##{@target_id}/option").map{|n| n.inner_text.strip}
+					select = doc.search("select##{@target_id}")
+					@found_select = ! select.empty?
+
+					if @found_select
+						select.search("/option").map{|n| n.inner_text.strip}
+					else
+						[]
+					end
 				end
 
 			end
