@@ -1,6 +1,11 @@
 require 'hpricot'
-%w(check_box_group drop_down radio_group span_text table_body table_header td_link).each do |element|
-	require File.join(File.dirname(__FILE__), 'matchers', "#{element}_matcher")
+
+# %w(check_box_group drop_down radio_group span_text table_body table_header td_link).each do |element|
+	# require File.join(File.dirname(__FILE__), 'matchers', "#{element}_matcher")
+# end
+
+Dir.glob(File.dirname(__FILE__) + '/matchers/*.rb').each do |rb|
+	require rb
 end
 
 module Spec # :nodoc:
