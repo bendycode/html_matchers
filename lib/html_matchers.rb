@@ -20,6 +20,10 @@ module Spec # :nodoc:
 				DropDownMatcher.new target_id, expected_options
 			end
 
+			def have_options expected_options
+				OptionsMatcher.new expected_options
+			end
+
 			def have_radio_group target_name, expected_radio_choices
 				RadioGroupMatcher.new target_name, expected_radio_choices
 			end
