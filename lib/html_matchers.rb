@@ -32,6 +32,10 @@ module Spec # :nodoc:
 				SpanTextMatcher.new target_id, expected_text
 			end
 
+      def have_table table_id_or_expected, expected = nil
+        TableMatcher.new table_id_or_expected, expected
+      end
+
 			def have_table_header table_id_or_expected, expected = nil
 				TableHeaderMatcher.new table_id_or_expected, expected
 			end
