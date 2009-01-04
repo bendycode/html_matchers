@@ -31,10 +31,10 @@ module Spec # :nodoc:
 					doc = Hpricot.XML(html)
 
 					rows = doc.search("table#{"##{@table_id}" if @table_id} tr")
-					header_elements = rows.select{|e| ! e.search('th').empty? }
+					header_elements = rows.reject{|e| e.search('th').empty? }
 					header_content = header_elements.map{|n| n.search('/th').map{|n| n.inner_text.strip.gsub(/\n    \t\t/, "\n")}}
 
-					body_elements = rows.select{|e| ! e.search('td').empty? }
+					body_elements = rows.reject{|e| e.search('td').empty? }
 					body_content = body_elements.map{|n| n.search('/td').map{|n| n.inner_text.strip.gsub(/\n    \t\t/, "\n")}}
 
           header_content + body_content
