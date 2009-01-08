@@ -20,7 +20,7 @@ module Spec # :nodoc:
 				end
 
 				def failure_message
-					"\nWrong table contents.\nexpected: #{@expected.inspect}\n   found: #{@actual.inspect}\n\n"
+					"\nWrong table contents.\nexpected: #{@expected.inspect.gsub('], [', "],\n[")}\n   found: #{@actual.inspect.gsub('], [', "],\n[")}\n\n"
 				end
 
 				def negative_failure_message
