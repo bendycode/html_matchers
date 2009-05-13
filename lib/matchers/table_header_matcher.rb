@@ -2,7 +2,6 @@ module Spec # :nodoc:
 	module Rails
 		module Matchers
 			class TableHeaderMatcher
-
 				def initialize table_id_or_expected, expected
 					case table_id_or_expected
 					when String
@@ -28,11 +27,16 @@ module Spec # :nodoc:
 				end
 
 				def extract_html_content html
+          html = html.gsub('<br/>', "\n")
 					doc = Hpricot.XML(html)
-					elements = doc.search("table#{"##{@table_id}" if @table_id} tr").reject{|e| e.search('th').empty? }
-					elements.map{|n| n.search('/th').map{|n| n.inner_text.strip.gsub(/\n    \t\t/, "\n")}}
+					elements = doc.search("table#{"##{@table_id}" if @table_id} tr")
+					elements = elements.reject{|e| e.search('th').empty? }
+					elements.map do |node|
+            node.search('/th').map do |n|
+              n.inner_text.strip.gsub(/\n    \t\t/, "\n")
+            end
+          end
 				end
-
 			end
 		end
 	end
