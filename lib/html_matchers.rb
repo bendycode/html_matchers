@@ -24,6 +24,10 @@ module Spec # :nodoc:
         DropDownMatcher.new target_id, expected_options
       end
 
+      def have_image expected_path
+        ImageMatcher.new expected_path
+      end
+
       def have_options expected_options
         OptionsMatcher.new expected_options
       end
