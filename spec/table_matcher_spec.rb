@@ -13,6 +13,13 @@ describe 'table_matcher' do
       response = mock_model(Object, :body => '<table id="my_id"><tr><th>h1</th><th>h2</th></tr><tr><td>c1</td><td>c2</td></tr></table>')
       response.should have_table('my_id', [['h1', 'h2'], ['c1', 'c2']])
     end
+
+    describe 'with extraneous multiline whitespace' do 
+      it 'should remove extraneous whitespace' do
+        response = mock_model(Object, :body => "<table id=\"my_id\"><tr><th>h1</th><th>h2</th></tr><tr><td>\n  c1a\n   \t<br/>   \tc1b</td><td>c2</td></tr></table>")
+        response.should have_table('my_id', [['h1', 'h2'], ["c1a\nc1b", 'c2']])
+      end
+    end
   end
 
   it 'can be called without a table_id' do

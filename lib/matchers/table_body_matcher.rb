@@ -30,7 +30,7 @@ module Spec # :nodoc:
         def extract_html_content html
           doc = Hpricot.XML(html)
           elements = doc.search("table#{"##{@table_id}" if @table_id} tr").reject{|e| e.search('td').empty? }
-          elements.map{|n| n.search('/td').map{|n| n.inner_text.strip.gsub(/\n    \t\t/, "\n")}}
+          elements.map{|n| n.search('/td').map{|n| n.inner_text.strip.gsub(/[ \t]*\n[\n \t]*/, "\n")}}
         end
 
       end

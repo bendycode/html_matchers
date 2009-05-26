@@ -14,6 +14,13 @@ describe 'table_body_matcher' do
       response.should have_table_body('my_id', [['c1', 'c2']])
     end
 
+    describe 'with extraneous multiline whitespace' do
+      it 'should remove extraneous whitespace' do
+        response = mock_model(Object, :body => "<table id='my_id'><tr><td>\n  c1a\n   \t<br/>   \tc1b</td><td>c2</td></tr></table>")
+        response.should have_table_body('my_id', [["c1a\nc1b", 'c2']])
+      end
+    end
+
     it 'should ignore header row' do
       response = mock_model(Object, :body => '<table id="my_id"><tr><th>h1</th><th>h2</th></tr><tr><td>c1</td><td>c2</td></tr></table>')
       response.should have_table_body('my_id', [['c1', 'c2']])
