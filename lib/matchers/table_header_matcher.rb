@@ -33,7 +33,7 @@ module Spec # :nodoc:
           elements = elements.reject{|e| e.search('th').empty? }
           elements.map do |node|
             node.search('/th').map do |n|
-              n.inner_text.strip.gsub(/\n[\n \t]*/, "\n")
+              n.inner_text.strip.gsub(/[ \t]*\n[\n \t]*/, "\n")
               #n.inner_text.strip.gsub(/\n    \t\t/, "\n")
             end
           end

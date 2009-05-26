@@ -41,6 +41,12 @@ describe 'table_header_matcher' do
         "<table id='my_id'><tr><th>h1 - row 1    <br/>\t\th1 - row 2</th></tr></table>",
         [["h1 - row 1\nh1 - row 2"]]
     end
+
+    it 'should throw away any amount of white space spanning new lines' do
+      verify_table_header_match 'my_id',
+        "<table id='my_id'><tr><th>h1 - row 1 \n   <br/>\n      \t\th1 - row 2</th></tr></table>",
+        [["h1 - row 1\nh1 - row 2"]]
+    end
   end
 
   describe 'passed wrong id' do
