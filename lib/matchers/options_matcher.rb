@@ -2,7 +2,6 @@ module Spec # :nodoc:
   module Rails
     module Matchers
       class OptionsMatcher
-
         def initialize expected
           @expected = expected
         end
@@ -24,7 +23,6 @@ module Spec # :nodoc:
           doc = Hpricot.XML(html)
           doc.search("/option").map{|n| n.inner_text.strip}
         end
-
       end
     end
   end
