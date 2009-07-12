@@ -3,13 +3,13 @@ module Spec # :nodoc:
     module Matchers
       class TableMatcher
 
-        def initialize table_id_or_expected, expected
-          case table_id_or_expected
+        def initialize table_selector_or_expected, expected
+          case table_selector_or_expected
           when String
-            @table_id = table_id_or_expected
+            @table_selector = table_selector_or_expected
             @expected = expected
           when Array
-            @expected = table_id_or_expected
+            @expected = table_selector_or_expected
           end
           raise 'Invalid "expected" argument' if @expected.nil?
         end
@@ -30,7 +30,7 @@ module Spec # :nodoc:
         def extract_html_content html
           doc = Hpricot.XML(html)
 
-          rows = doc.search("table#{"##{@table_id}" if @table_id} tr")
+          rows = doc.search("table#{"#{@table_selector}" if @table_selector} tr")
           header_elements = rows.reject{|e| e.search('th').empty? }
           header_content = header_elements.map{|n| n.search('/th').map{|n| n.inner_text.strip.gsub(/[ \t]*\n[\n \t]*/, "\n")}}
 
