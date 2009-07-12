@@ -4,20 +4,20 @@ describe 'table_matcher' do
   describe 'with <thead> and <tbody> elements' do
     it 'should find header and body rows' do
       response = mock_model(Object, :body => '<table id="my_id"><thead><tr><th>h1</th><th>h2</th></tr></thead><tbody><tr><td>c1</td><td>c2</td></tr></tbody></table>')
-      response.should have_table('my_id', [['h1', 'h2'], ['c1', 'c2']])
+      response.should have_table('#my_id', [['h1', 'h2'], ['c1', 'c2']])
     end
   end
 
   describe 'without <thead> and <tbody> elements' do
     it 'should work' do
       response = mock_model(Object, :body => '<table id="my_id"><tr><th>h1</th><th>h2</th></tr><tr><td>c1</td><td>c2</td></tr></table>')
-      response.should have_table('my_id', [['h1', 'h2'], ['c1', 'c2']])
+      response.should have_table('#my_id', [['h1', 'h2'], ['c1', 'c2']])
     end
 
     describe 'with extraneous multiline whitespace' do 
       it 'should remove extraneous whitespace' do
         response = mock_model(Object, :body => "<table id=\"my_id\"><tr><th>h1</th><th>h2</th></tr><tr><td>\n  c1a\n   \t<br/>   \tc1b</td><td>c2</td></tr></table>")
-        response.should have_table('my_id', [['h1', 'h2'], ["c1a\nc1b", 'c2']])
+        response.should have_table('#my_id', [['h1', 'h2'], ["c1a\nc1b", 'c2']])
       end
     end
   end
@@ -35,14 +35,14 @@ describe 'table_matcher' do
   describe 'passed wrong id' do
     it 'should not match' do
       response = mock_model(Object, :body => '<table id="my_id"><tr><td>c1</td><td>c2</td></tr></table>')
-      response.should_not have_table('wrong_id', [['c1', 'c2']])
+      response.should_not have_table('#wrong_id', [['c1', 'c2']])
     end
   end
 
   describe 'passed non-matching expected' do
     it 'should not match' do
       response = mock_model(Object, :body => '<table id="my_id"><tr><td>c1</td><td>c2</td></tr></table>')
-      response.should_not have_table('my_id', [['c3', 'c2']])
+      response.should_not have_table('#my_id', [['c3', 'c2']])
     end
   end
 
@@ -50,7 +50,7 @@ describe 'table_matcher' do
     it 'should raise ExpectationNotMetError with correct message' do
       response = mock_model Object, :body => 'Some non-matching HTML'
       lambda do
-        response.should have_table('my_id', [['c1', 'c2']])
+        response.should have_table('#my_id', [['c1', 'c2']])
       end.should raise_error(Spec::Expectations::ExpectationNotMetError, "\nWrong table contents.\nexpected: [[\"c1\", \"c2\"]]\n   found: []\n\n")
     end
   end
@@ -58,7 +58,7 @@ describe 'table_matcher' do
   describe 'with negative failure' do
     it 'should raise ExpectationNotMetError' do
       response = mock_model Object, :body => '<table id="my_id"><tr><td>c1</td><td>c2</td></tr></table>'
-      lambda{response.should_not have_table('my_id', [['c1', 'c2']])}.should raise_error(Spec::Expectations::ExpectationNotMetError,
+      lambda{response.should_not have_table('#my_id', [['c1', 'c2']])}.should raise_error(Spec::Expectations::ExpectationNotMetError,
         "\nTable should not have matched: [[\"c1\", \"c2\"]]\n")
     end
   end
@@ -66,7 +66,7 @@ describe 'table_matcher' do
   describe 'passed nil expected' do
     it 'should raise error' do
       response = mock_model(Object, :body => '<table id="my_id"><tr><td>c1</td><td>c2</td></tr></table>')
-      lambda{ response.should have_table('my_id', nil)}.should raise_error(RuntimeError, 'Invalid "expected" argument')
+      lambda{ response.should have_table('#my_id', nil)}.should raise_error(RuntimeError, 'Invalid "expected" argument')
     end
   end
 end
