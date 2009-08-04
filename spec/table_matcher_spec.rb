@@ -20,6 +20,30 @@ describe 'table_matcher' do
         response.should have_table('#my_id', [['h1', 'h2'], ["c1a\nc1b", 'c2']])
       end
     end
+
+    describe 'with inline script tags in a header cell' do
+      it "should suppress script content" do
+        response = mock_model(Object, :body => '<table id="my_id"><tr><th>h1</th><th>h2a<script type="text/javascript">
+          //<![CDATA[
+          x = 1;
+          //]]>
+          </script>
+          h2b</th></tr><tr><td>c1</td><td>c2</td></tr></table>')
+        response.should have_table('#my_id', [['h1', "h2a\nh2b"], ["c1", "c2"]])
+      end
+    end
+
+    describe 'with inline script tags in a cell' do
+      it "should suppress script content" do
+        response = mock_model(Object, :body => '<table id="my_id"><tr><th>h1</th><th>h2</th></tr><tr><td>c1a<script type="text/javascript">
+          //<![CDATA[
+          x = 1;
+          //]]>
+          </script>
+          c1b</td></tr></table>')
+        response.should have_table('#my_id', [['h1', 'h2'], ["c1a\nc1b"]])
+      end
+    end
   end
 
   it 'can be called without a table_id' do
