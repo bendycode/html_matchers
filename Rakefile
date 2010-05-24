@@ -29,7 +29,7 @@ end
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
-    gemspec.name = "the-perfect-gem"
+    gemspec.name = "html_matchers_test_3"
     gemspec.summary = "One line summary of your gem"
     gemspec.description = "A different and possibly longer explanation of"
     gemspec.email = "josh@technicalpickles.com"
